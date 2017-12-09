@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.IconGroupDao">
+    <select id="queryAll" resultType="com.ydh.model.IconGroup">
+        select id as id
+               ,name as name
+               ,pid as pid
+        from exec_icon_group ORDER BY name
+    </select>
+    <select id="queryIconGroup" resultType="com.ydh.model.IconGroup">
+        select id as id
+        ,name as name
+        ,pid as pid
+        from exec_icon_group
+        where 1=1
+        <if test="_parameter!=null and _parameter!=''">
+            and pid=#{pid}
+        </if>
+        ORDER BY name
+    </select>
+    <insert id="addIconGroup" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.IconGroup">
+        INSERT INTO exec_icon_group(name,pid) VALUES(#{name},#{pid})
+    </insert>
+
+    <update id="modifyIconGroup" parameterType="com.ydh.model.IconGroup">
+        update exec_icon_group set pid=#{pid},name=#{name} where id=#{id}
+    </update>
+
+    <delete id="deleteByID" >
+        delete from exec_icon_group where id=#{id}
+    </delete>
+</mapper>

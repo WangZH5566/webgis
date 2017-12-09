@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.SeaChartDao">
+    <select id="queryAll" resultType="com.ydh.dto.SeaChartDto">
+        select id as id
+               ,sea_chart_name as seaChartName
+               ,url as url
+               ,layer as layer
+               ,bound as bound
+               ,layer_num as layerNum
+               ,resolution as resolution
+        from exec_sea_chart where deleted = 0
+    </select>
+
+    <select id="queryByUserId" resultType="com.ydh.dto.SeaChartDto">
+        select id as id
+               ,sea_chart_name as seaChartName
+               ,url as url
+               ,layer as layer
+               ,bound as bound
+               ,layer_num as layerNum
+               ,resolution as resolution
+        from exec_sea_chart where id in (select sea_chart from exec_execise where id in (select exec_id from exec_execise_user where id = #{userId}))
+    </select>
+    
+    <insert id="addSeaChart" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.SeaChart">
+        INSERT INTO exec_sea_chart(sea_chart_name,url, bound,layer,layer_num,resolution)
+        VALUES(#{seaChartName},#{url},#{bound},#{layer},#{layerNum},#{resolution})
+    </insert>
+
+    <update id="deleteById">
+        UPDATE exec_sea_chart SET deleted = 1 WHERE id = #{id}
+    </update>
+
+    <select id="querySeaChartByExecId" parameterType="java.lang.Integer" resultType="com.ydh.dto.SeaChartDto">
+        select id as id
+               ,sea_chart_name as seaChartName
+               ,url as url
+               ,layer as layer
+               ,bound as bound
+               ,layer_num as layerNum
+               ,resolution as resolution
+        from exec_sea_chart where id in (select sea_chart from exec_execise where id=#{0})
+    </select>
+
+</mapper>

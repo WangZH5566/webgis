@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="sa.main" extends="base2.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/situationAnnotationMain.jsp" />
+    </definition>
+
+    <definition name="sa.equipmentAdd" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/equipmentAddPage.jsp" />
+    </definition>
+    <definition name="sa.iconInfo" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/iconInfo.jsp" />
+    </definition>
+    <definition name="sa.iconDamage" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/iconDamage.jsp" />
+    </definition>
+
+    <definition name="sa.crowdSet" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/crowdSet.jsp" />
+    </definition>
+
+    <definition name="sa.crowdView" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/crowdView.jsp" />
+    </definition>
+
+    <definition name="sa.crowdDetail" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/crowdDetailList.jsp" />
+    </definition>
+
+    <definition name="sa.takeOffSet" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/takeOffSet.jsp" />
+    </definition>
+
+    <definition name="sa.landingSet" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/landingSet.jsp" />
+    </definition>
+
+    <definition name="sa.formulaView" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/situationAnnotation/formulaView.jsp" />
+    </definition>
+</tiles-definitions>

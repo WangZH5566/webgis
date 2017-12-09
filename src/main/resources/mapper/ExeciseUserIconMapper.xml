@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseUserIconDao">
+
+    <select id="queryListByUser" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseUserIcon">
+        SELECT id as id,exec_id as execId,icon_data as iconData, comment as comment,create_by as createBy,create_time as createTime
+        FROM exec_execise_user_icon WHERE create_by=#{0}
+    </select>
+
+    <select id="findByID" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseUserIcon">
+        SELECT id as id,exec_id as execId,icon_data as iconData, comment as comment,create_by as createBy,create_time as createTime
+        FROM exec_execise_user_icon WHERE id=#{0}
+    </select>
+
+    <insert id="addExeciseUserIcon" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseUserIcon">
+        INSERT INTO exec_execise_user_icon(exec_id, create_by, create_time, icon_data, comment) VALUES ( #{execId}, #{createBy}, #{createTime}, #{iconData},#{comment})
+    </insert>
+
+    <update id="modifyExeciseUserIcon" parameterType="com.ydh.model.ExeciseUserIcon">
+        UPDATE exec_execise_user_icon SET icon_data=#{iconData} WHERE id=#{id}
+    </update>
+
+    <delete id="deleteExeciseUserIcon" parameterType="java.lang.Integer">
+        DELETE FROM exec_execise_user_icon WHERE id=#{0}
+    </delete>
+
+</mapper>

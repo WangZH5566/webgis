@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.FormulaDao">
+
+    <select id="queryAll" resultType="com.ydh.model.Formula">
+        SELECT id as id,name as name,remark as remark,val as val
+        FROM exec_formula
+        ORDER BY id
+    </select>
+
+    <select id="queryByIds" parameterType="java.lang.Integer" resultType="com.ydh.model.Formula">
+        SELECT id as id,name as name,remark as remark,val as val
+        FROM exec_formula WHERE 1 = 1 AND id IN
+        <foreach collection="array" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryCount" parameterType="com.ydh.dto.FormulaDto" resultType="java.lang.Integer">
+        select count(1) from exec_formula where 1 =1
+        <if test="name != null and name !=''">
+            and name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="id != null and id !=''">
+            and id = #{id}
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="com.ydh.dto.FormulaDto" resultType="com.ydh.model.Formula">
+        select id as id,name as name,remark as remark,val as val
+        from exec_formula where 1 = 1
+        <if test="name != null and name !=''">
+            and name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="id != null and id !=''">
+            and id = #{id}
+        </if>
+        order by id ${postgreSQLQueryPage}
+    </select>
+
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.Formula">
+        insert into exec_formula(name,remark,val)
+        values(#{name},#{remark},#{val})
+    </insert>
+    
+    <update id="update" parameterType="com.ydh.model.Department">
+        update exec_formula set name=#{name},remark=#{remark},
+        val=#{val} where id=#{id}
+    </update>
+
+    <update id="delete" parameterType="java.lang.Integer">
+        delete from exec_formula where id=#{0}
+    </update>
+</mapper>

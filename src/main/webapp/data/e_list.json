@@ -1,0 +1,23 @@
+{
+  "list": [
+    {
+      "id": 1,
+      "name": "XX舰队联合作战推演-1",
+      "createTime": "2016-04-27 10:23",
+      "startTime": "2016-05-02 10:23",
+      "endTime": "2016-05-02 12:24",
+      "mapName": "海图一",
+      "attendee": [
+        {"username": "张三"},
+        {"username": "李四"},
+        {"username": "王五"}
+      ],
+      "memo": ""
+    }
+  ],
+  "total": 20,
+  "pageNum": 1,
+  "pageSize": 20,
+  "msg": "success",
+  "msgCode": 0
+}

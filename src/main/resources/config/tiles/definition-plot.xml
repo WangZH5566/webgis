@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="plot.chooseIcon" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/plotChooseIcon.jsp" />
+    </definition>
+
+    <definition name="plot.queryIcon" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/queryIcon.jsp" />
+    </definition>
+
+    <definition name="plot.addIcon" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/plotAddIcon.jsp" />
+    </definition>
+
+    <definition name="plot.addIcon_user" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/plotAddIcon_user.jsp" />
+    </definition>
+
+    <definition name="plot.addIcon_user_new" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/plotAddIcon_user_new.jsp" />
+    </definition>
+
+    <definition name="plot.iconAmmunitionSetting" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/ammunitionSetting.jsp" />
+    </definition>
+
+    <definition name="plot.iconEquipmentSetting" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/equipmentSetting.jsp" />
+    </definition>
+
+    <definition name="plot.iconRightSetting" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/iconRightSetting.jsp" />
+    </definition>
+
+    <definition name="plot.iconPlaneSetting" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/plot/planeSetting.jsp" />
+    </definition>
+</tiles-definitions>

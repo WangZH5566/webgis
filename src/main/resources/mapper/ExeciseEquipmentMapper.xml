@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseEquipmentDao">
+    <select id="queryIconEquipment" resultType="com.ydh.dto.ExeciseEquipmentDto">
+        SELECT
+            eee.ID AS ID,
+            eee.icon_id AS icon,
+            eee.order_id AS ORDER,
+            eee.equipment_id AS equipment,
+            eee.equipment_name AS equipmentName,
+            eee.load_time AS loadTime,
+            eee.equipment_count AS equipmentCount,
+            eee.main_type as mainType
+        FROM
+            exec_execise_equipment eee
+        WHERE
+            eee.icon_id = #{iconID} and eee.main_type=5
+    </select>
+
+    <insert id="batchAdd" parameterType="java.util.List">
+        INSERT INTO exec_execise_equipment(icon_id,order_id,equipment_id,equipment_name,load_time,equipment_count,main_type,execise_troop_id)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.iconId},#{item.orderId},#{item.equipmentId},#{item.equipmentName},#{item.loadTime},#{item.equipmentCount},#{item.mainType},#{item.execiseTroopId})
+        </foreach>
+    </insert>
+
+    <select id="findExeciseEquipmentByExecIconId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseEquipmentDto">
+        select ee.id as id,ee.icon_id as icon,ee.order_id as order,ee.equipment_id as equipment,
+        ee.equipment_name as equipmentName,ee.load_time as loadTime,ee.equipment_count as equipmentCount,ee.main_type as mainType
+        from exec_execise_equipment ee where ee.icon_id=#{0}
+    </select>
+
+    <delete id="deleteExeciseEquipmentByExecIconId" parameterType="java.lang.Integer">
+        delete from exec_execise_equipment where icon_id=#{0}
+    </delete>
+
+    <delete id="deleteExeciseEquipmentByExeciseTroopIdId" parameterType="java.lang.Integer">
+        delete from exec_execise_equipment where execise_troop_id=#{0}
+    </delete>
+
+    <delete id="deleteExeciseEquipmentByExeciseTroopIdAirportId" parameterType="java.lang.Integer">
+        delete from exec_execise_equipment where execise_troop_id in
+        (SELECT t.id from exec_execise_troop t where t.belong_airport=#{0})
+    </delete>
+
+    <update id="modifyExeciseIconIdByExeciseTroopId" parameterType="java.lang.Integer">
+        UPDATE exec_execise_equipment set icon_id=#{1} where execise_troop_id=#{0}
+    </update>
+
+    <select id="findExeciseEquipmentByExecId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseEquipmentDto">
+        select id as id,icon_id as icon,order_id as order,equipment_id as equipment,
+        equipment_name as equipmentName,load_time as loadTime,equipment_count as equipmentCount,main_type as mainType,
+        execise_troop_id as execiseTroopId
+        from exec_execise_equipment ee where execise_troop_id in (select t.id as id from exec_execise_troop t WHERE t.exec_id=#{0})
+    </select>
+</mapper>

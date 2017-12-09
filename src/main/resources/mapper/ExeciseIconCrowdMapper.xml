@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseIconCrowdDao">
+
+    <select id="findDetailByExecId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconCrowdDetailDto">
+        select ic.id as iconId,ic.icon_name as iconName,icc.id as crowdId,icc.crowd_name as crowdName,
+        icd.is_main as isMain from exec_execise_icon_crowd_detail icd
+        inner join exec_execise_icon_crowd icc on icd.crowd_id=icc.id
+        inner join exec_execise_icon ic on ic.id=icd.icon_id
+        where icc.exec_id=#{0} order by icc.id,icd.is_main
+    </select>
+
+    <select id="findIconForInsertCrowd" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconCrowdDetailDto">
+        SELECT ic.id as iconId,ic.icon_name as iconName,icc.id as crowdId,icc.crowd_name as crowdName,
+        icd.is_main as isMain,ic.belong_airport as belongAirport
+        from exec_execise_icon ic
+        left join exec_execise_icon_crowd_detail icd on icd.icon_id=ic.id
+        left join exec_execise_icon_crowd icc on icc.id=icd.crowd_id
+        where ic.exec_id=#{0} and ic.is_delete=0 and ic.icon_type=0 order by icc.id,icd.is_main,ic.id
+    </select>
+
+    <select id="findIconForInsertPlaneCrowd" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconCrowdDetailDto">
+        select ic.id as iconId,ic.icon_name as iconName,icc.id as crowdId,icc.crowd_name as crowdName,
+        icd.is_main as isMain from exec_execise_icon ic
+        left join exec_execise_icon_crowd_detail icd on icd.icon_id=ic.id
+        left join exec_execise_icon_crowd icc on icc.id=icd.crowd_id
+        where ic.main_type=1 and ic.is_delete=0 and ic.icon_type=0 and ic.belong_airport=#{0}
+    </select>
+
+    <select id="findExeciseIconCrowdByExecId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconCrowdDto">
+        select id as id,crowd_name as crowdName from exec_execise_icon_crowd where exec_id=#{0} order by id
+    </select>
+
+    <select id="findExeciseIconCrowdByIconId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconCrowdDetailDto">
+        select icc.id as crowdId,icc.crowd_name as crowdName,icd.icon_id as iconId
+        from exec_execise_icon ic
+        inner join exec_execise_icon_crowd_detail icd on icd.icon_id=ic.id
+        inner join exec_execise_icon_crowd icc on icc.id=icd.crowd_id
+        where ic.main_type=1 and ic.is_delete=0 and ic.icon_type=0 and ic.belong_airport=#{0} and icd.is_main=1
+    </select>
+
+    <select id="findExeciseIconCrowdDetailByCrowdId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconCrowdDetailDto">
+        select icd.crowd_id as crowdId,icd.icon_id as iconId,
+        ic.icon_name as iconName from exec_execise_icon_crowd_detail icd
+        inner join exec_execise_icon ic on ic.id=icd.icon_id
+        where icd.crowd_id=#{0}
+    </select>
+
+    <insert id="addExeciseIconCrowd" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseIconCrowd">
+        insert into exec_execise_icon_crowd(crowd_name,exec_id) values(#{crowdName},#{execId})
+    </insert>
+
+    <insert id="addExeciseIconCrowdDetail" parameterType="com.ydh.model.ExeciseIconCrowdDetail">
+        insert into exec_execise_icon_crowd_detail(crowd_id,icon_id,is_main) values(#{crowdId},#{iconId},#{isMain})
+    </insert>
+
+    <delete id="deleteExeciseIconCrowdById" parameterType="java.lang.Integer">
+        DELETE FROM exec_execise_icon_crowd WHERE id=#{0}
+    </delete>
+
+    <delete id="deleteExeciseIconCrowdDetailByCrowdId" parameterType="java.lang.Integer">
+        DELETE FROM exec_execise_icon_crowd_detail WHERE crowd_id=#{0}
+    </delete>
+
+    <delete id="deleteExeciseIconCrowdDetailByIconId" parameterType="java.lang.Integer">
+        DELETE FROM exec_execise_icon_crowd_detail WHERE icon_id=#{0}
+    </delete>
+
+    <select id="findCrowdIdByIconId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select crowd_id from exec_execise_icon_crowd_detail where icon_id=#{0}
+    </select>
+
+    <select id="findDetailCountByCrowdId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(1) from exec_execise_icon_crowd_detail where crowd_id=#{0}
+    </select>
+</mapper>

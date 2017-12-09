@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.TelegramDao">
+
+    <select id="queryTeleCount" parameterType="com.ydh.dto.TelegramDto" resultType="java.lang.Integer">
+        select count(1) from exec_telegram where create_by=#{createBy}
+        <if test="tname != null and tname !=''">
+            and t_name like CONCAT('%',#{tname},'%')
+        </if>
+    </select>
+
+    <select id="queryTelePage" parameterType="com.ydh.dto.TelegramDto" resultType="com.ydh.dto.TelegramDto">
+        select t.id as id,t.t_name as tname,t.t_path as tpath,t.t_html_path as thtmlpath,t.msg as msg,
+        t.t_status as tstatus,t.create_time as createTime from exec_telegram t
+        where create_by=#{createBy}
+        <if test="tname != null and tname !=''">
+            and t_name like CONCAT('%',#{tname},'%')
+        </if>
+        order by t.id desc ${postgreSQLQueryPage}
+    </select>
+
+    <select id="queryById" parameterType="java.lang.Integer" resultType="com.ydh.model.Telegram">
+        select t.id as id,t.t_name as tname,t.t_path as tpath,t.t_html_path as thtmlpath,t.msg as msg,t.t_status as tstatus from exec_telegram t where t.id=#{0}
+    </select>
+
+    <select id="queryForCorn" parameterType="java.lang.Integer" resultType="com.ydh.model.Telegram">
+        select t.id as id,t.t_name as tname,t.t_path as tpath,t.t_html_path as thtmlpath,t.msg as msg
+        from exec_telegram t where t.t_status=#{0} and t.t_path is not null
+    </select>
+
+    <insert id="addTelegram" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.Telegram">
+        insert into exec_telegram(t_name,t_path,exec_id,t_status,create_by,create_time) values(#{tname},#{tpath},#{execId},#{tstatus},#{createBy},#{createTime})
+    </insert>
+
+    <update id="modifyTelegram" parameterType="com.ydh.model.Telegram">
+        update exec_telegram set
+        <if test="thtmlpath != null">
+            t_html_path=#{thtmlpath},
+        </if>
+        <if test="msg != null">
+            msg=#{msg},
+        </if>
+        <if test="tstatus != null">
+            t_status=#{tstatus},
+        </if>
+        last_update_time=#{lastUpdateTime} where id=#{id}
+    </update>
+
+    <delete id="deleteTelegram" parameterType="java.lang.Integer">
+        delete from exec_telegram where id=#{0}
+    </delete>
+
+    <select id="queryUserTelegram" parameterType="java.lang.Integer" resultType="com.ydh.model.Telegram">
+        select t.id as id,t.t_name as tname from exec_telegram t where t.create_by=#{0}
+    </select>
+
+    <select id="queryTeleReceiveCount" parameterType="com.ydh.dto.TelegramSendDto" resultType="java.lang.Integer">
+        select count(1) from exec_telegram_send ts
+        inner join exec_telegram t on t.id=ts.exec_telegram_id
+        inner join exec_execise_user eu on eu.id=ts.create_by
+        where ts.receive_by=#{receiveBy}
+    </select>
+
+    <select id="queryTeleReceivePage" parameterType="com.ydh.dto.TelegramSendDto" resultType="com.ydh.dto.TelegramSendDto">
+        select ts.id as id,ts.exec_telegram_id as telegramId,t.t_name as telegramName,
+        eu.user_name as sendByName,ts.create_time as receiveTime,ts.is_read as isRead,
+        ts.is_receipt as isReceipt,ts.receipt_msg as receiptMsg,t.t_path as docName
+        from exec_telegram_send ts
+        inner join exec_telegram t on t.id=ts.exec_telegram_id
+        inner join exec_execise_user eu on eu.id=ts.create_by
+        where ts.receive_by=#{receiveBy} order by ts.create_time desc ${postgreSQLQueryPage}
+    </select>
+
+    <select id="queryTeleSendCount" parameterType="com.ydh.dto.TelegramSendDto" resultType="java.lang.Integer">
+        select count(1) from exec_telegram_send ts
+        inner join exec_telegram t on t.id=ts.exec_telegram_id
+        where ts.create_by=#{sendBy} group by ts.exec_telegram_id,t.t_name,ts.create_time
+    </select>
+
+    <select id="queryTeleSendPage" parameterType="com.ydh.dto.TelegramSendDto" resultType="com.ydh.dto.TelegramSendDto">
+        select ts.exec_telegram_id as telegramId,t.t_name as telegramName,ts.create_time as receiveTime
+        from exec_telegram_send ts
+        inner join exec_telegram t on t.id=ts.exec_telegram_id
+        where ts.create_by=#{sendBy} group by ts.exec_telegram_id,t.t_name,ts.create_time
+        order by ts.create_time desc ${postgreSQLQueryPage}
+    </select>
+
+    <select id="queryTeleSendDetailCount" parameterType="com.ydh.dto.TelegramSendDto" resultType="java.lang.Integer">
+        select count(1) from exec_telegram_send ts
+        inner join exec_telegram t on t.id=ts.exec_telegram_id
+        inner join exec_execise_user eu on eu.id=ts.receive_by
+        where ts.create_by=#{sendBy} and ts.exec_telegram_id=#{telegramId}
+    </select>
+
+    <select id="queryTeleSendDetailPage" parameterType="com.ydh.dto.TelegramSendDto" resultType="com.ydh.dto.TelegramSendDto">
+        select ts.id as id,ts.exec_telegram_id as telegramId,t.t_name as telegramName,
+        eu.user_name as receiveByName,ts.create_time as receiveTime,ts.is_read as isRead,
+        ts.is_receipt as isReceipt,ts.receipt_msg as receiptMsg from exec_telegram_send ts
+        inner join exec_telegram t on t.id=ts.exec_telegram_id
+        inner join exec_execise_user eu on eu.id=ts.receive_by
+        where ts.create_by=#{sendBy} and ts.exec_telegram_id=#{telegramId}
+        order by ts.id ${postgreSQLQueryPage}
+    </select>
+
+    <insert id="sendTelegram" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.TelegramSend">
+        insert into exec_telegram_send(receive_by,receive_time,exec_telegram_id,create_by,create_time,is_read,is_receipt,is_main_send)
+        values(#{receiveBy},#{receiveTime},#{telegramId},#{createBy},#{createTime},#{isRead},#{isReceipt},#{isMainSend})
+    </insert>
+
+    <insert id="sendTelegramBatch" parameterType="java.util.List">
+        INSERT INTO exec_telegram_send(receive_by,receive_time,exec_telegram_id,create_by,create_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.receiveBy},#{item.receiveTime},#{item.telegramId},#{item.createBy},#{item.createTime})
+        </foreach>
+    </insert>
+
+    <update id="modifyIsReadOrIsReccipt" parameterType="com.ydh.model.TelegramSend">
+        update exec_telegram_send set
+        <if test="isRead != null">
+            is_read=#{isRead}
+        </if>
+        <if test="isReceipt != null">
+            is_receipt=#{isReceipt}
+            <if test="receiptMsg!=null and receiptMsg!=''">
+                ,receipt_msg=#{receiptMsg}
+            </if>
+        </if>
+        where id=#{id}
+    </update>
+</mapper>

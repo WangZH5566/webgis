@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseOrderDao">
+        <insert id="addOrder" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseOrder">
+             INSERT INTO exec_execise_order(exec_id,order_type,path_coordinate,icon_one_id,icon_two_id,begin_time,
+             order_by,move_angle,fight_begin_time,damage,damage_time,damage_detail,repair_num,add_equipment_time,is_end)
+             VALUES(#{execId},#{orderType},#{pathCoordinate},#{iconOneId},#{iconTwoId},#{beginTime},#{orderBy},
+             #{moveAngle},#{fightBeginTime},#{damage},#{damageTime},#{damageDetail},#{repairNum},#{addEquipmentTime},0)
+        </insert>
+
+        <select id="listOrder" resultType="com.ydh.model.ExeciseOrder">
+            SELECT  T.id AS id
+                    ,T.exec_id AS execId
+                    ,T.order_type AS orderType
+                    ,T.path_coordinate AS pathCoordinate
+                    ,T.icon_one_id AS iconOneId
+                    ,T.icon_two_id AS iconTwoId
+                    ,T.begin_time AS beginTime
+                    ,T.order_by AS orderBy
+                    ,T.move_angle as moveAngle
+                    ,T.fight_begin_time as fightBeginTime
+                    ,T.damage as damage
+                    ,T.damage_time as damageTime
+                    ,T.damage_detail as damageDetail
+                    ,T.repair_num as repairNum
+                    ,T.add_equipment_time as addEquipmentTime
+                    ,T.repair_begin_time as repairBeginTime
+                    ,T.add_equipment_begin_time as addEquipmentBeginTime
+                    ,T.is_end as isEnd
+            FROM exec_execise_order T
+            WHERE T.exec_id = #{execId} ORDER BY T.fight_begin_time
+        </select>
+
+    <update id="modifyBeginTime" parameterType="com.ydh.model.ExeciseOrder">
+        update exec_execise_order set begin_time=#{beginTime} where exec_id=#{execId}
+    </update>
+
+    <update id="modifyRepairBeginTime" parameterType="com.ydh.model.ExeciseOrder">
+        update exec_execise_order set repair_begin_time=#{repairBeginTime} where id=#{id}
+    </update>
+
+    <update id="modifyAddEquipmentBeginTime" parameterType="com.ydh.model.ExeciseOrder">
+        update exec_execise_order set add_equipment_begin_time=#{addEquipmentBeginTime} where id=#{id}
+    </update>
+
+    <update id="modifyIsEnd" parameterType="java.lang.Integer">
+        update exec_execise_order set is_end=1 where id=#{id}
+    </update>
+</mapper>

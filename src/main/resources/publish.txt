@@ -1,0 +1,8 @@
+发布到120.25.216.91上:
+1.修改webgis.properties的所有文件存储路径,以及HTTP访问路径;
+2.修改geoserver.properties,将geoserver.url改成120.25.216.91:8888(如果不改，也不会报错);
+3.修改PropertiesUtil.java的load方法,需要使用Linux下的路径;
+4.注意上传文件时,本地的定时器可能和服务器上的定时器冲突(本地文件被服务器上的定时器处理,
+或者服务器上的文件被本地定时器处理);
+5.修改jdbc.properties
+6.AsposeWordsUtils里的获取licence方法

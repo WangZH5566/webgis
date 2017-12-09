@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.TelegramTemplateDao">
+
+    <select id="queryAll" resultType="com.ydh.model.TelegramTemplate">
+        select tt.id as id,tt.t_name as tname,tt.t_path as tpath,tt.t_html_path as thtmlpath,
+        tt.pid as pid,tt.msg as msg,tt.t_status as tstatus from exec_telegram_template tt order by tt.id
+    </select>
+
+    <select id="queryById" parameterType="java.lang.Integer" resultType="com.ydh.model.TelegramTemplate">
+        select tt.id as id,tt.t_name as tname,tt.t_path as tpath,tt.t_html_path as thtmlpath,
+        tt.pid as pid,tt.msg as msg,tt.t_status as tstatus from exec_telegram_template tt where tt.id=#{0}
+    </select>
+
+    <select id="queryForCorn" parameterType="java.lang.Integer" resultType="com.ydh.model.TelegramTemplate">
+        select tt.id as id,tt.t_name as tname,tt.t_path as tpath,tt.t_html_path as thtmlpath,
+        tt.pid as pid from exec_telegram_template tt where tt.t_status=#{0} and tt.t_path is not null
+    </select>
+
+    <insert id="addTt" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.TelegramTemplate">
+        insert into exec_telegram_template(t_name,pid,create_by,create_time) values(#{tname},#{pid},#{createBy},#{createTime})
+    </insert>
+
+    <update id="modifyTt" parameterType="com.ydh.model.TelegramTemplate">
+        update exec_telegram_template set
+        <if test="tname != null">
+            t_name=#{tname},
+        </if>
+        <if test="pid != null">
+            pid=#{pid},
+        </if>
+        <if test="tpath != null">
+            t_path=#{tpath},
+        </if>
+        <if test="thtmlpath != null">
+            t_html_path=#{thtmlpath},
+        </if>
+        <if test="msg != null">
+            msg=#{msg},
+        </if>
+        <if test="tstatus != null">
+            t_status=#{tstatus},
+        </if>
+        last_update_time=#{lastUpdateTime},
+        last_update_by=#{lastUpdateBy} where id=#{id}
+    </update>
+
+    <delete id="deleteTt" parameterType="java.lang.Integer">
+        delete from exec_telegram_template where id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseFightTimeDao">
+
+    <select id="findExeciseFightTimeByExecIdAndStepId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseFightTimeDto">
+        select id as id,exec_id as execId,step_id as stepId,fight_begin_time as fightBeginTime,
+        fight_end_time as fightEndTime,now_time as nowTime
+        from exec_execise_fight_time where exec_id=#{0} AND step_id=#{1} ORDER BY fight_begin_time
+    </select>
+
+    <insert id="addExeciseFightTime" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseFightTime">
+        INSERT INTO exec_execise_fight_time(exec_id,step_id,fight_begin_time,fight_end_time,now_time)
+        VALUES(#{execId},#{stepId},#{fightBeginTime},#{fightEndTime},#{nowTime})
+    </insert>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseStepDao">
+
+    <select id="findExeciseStepByExecId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseStepDto">
+        select id as id,exec_id as execId,step_length as stepLength,begin_time as beginTime,end_time as endTime,
+        fight_begin_time as fightBeginTime,fight_end_time as fightEndTime
+        from exec_execise_step where exec_id=#{0} order by begin_time
+    </select>
+
+    <insert id="addExeciseStep" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseStep">
+        insert into exec_execise_step(exec_id,step_length,begin_time,end_time,fight_begin_time,fight_end_time)
+        values(#{execId},#{stepLength},#{beginTime},#{endTime},#{fightBeginTime},#{fightEndTime})
+    </insert>
+    
+    <update id="modifyExeciseStep" parameterType="com.ydh.model.ExeciseStep">
+        update exec_execise_step set end_time=#{endTime},fight_end_time=#{fightEndTime} where id=#{id}
+    </update>
+</mapper>

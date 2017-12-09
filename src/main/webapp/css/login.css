@@ -1,0 +1,276 @@
+@charset "utf-8";
+/*-----------------------------------------------------------------------------------------------
+ * 颜色定义
+ ------------------------------------------------------------------------------------------------*/
+/* body背景颜色 */
+/* CSS Document */
+/* 清除内外边距 */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+b,
+fieldset,
+lengend,
+button,
+input,
+textarea,
+th,
+td {
+  /* table elements 表格元素 */
+  margin: 0;
+  padding: 0;
+}
+/* 设置默认字体 */
+body,
+button,
+input,
+select,
+textarea {
+  /* for ie */
+  font: 12px/1 Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;
+  /* 用 ascii 字符表示，使得在任何编码下都无问题 */
+  color: #464646;
+}
+h1 {
+  font-size: 18px;
+  /* 18px / 12px = 1.5 */
+}
+h2,
+h3 {
+  font-size: 14px;
+  font-weight: normal;
+}
+h4,
+h5,
+h6 {
+  font-size: 100%;
+}
+/* 重置列表元素 */
+ul {
+  list-style: none;
+}
+/* 重置文本格式元素 */
+a {
+  text-decoration: none;
+  cursor: pointer;
+  color: #333;
+}
+a:hover {
+  text-decoration: none;
+}
+a {
+  outline: none;
+}
+/*FF去掉焦点框*/
+/* 重置表单元素 */
+legend {
+  color: #000;
+}
+/* for ie6 */
+fieldset,
+img {
+  border: none;
+}
+/* img 搭车：让链接里的 img 无边框 */
+button,
+input,
+select,
+textarea {
+  /*  font-size: 100%; 使得表单元素在 ie 下能继承字体大小 */
+}
+/* 重置表格元素 */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+/* 重置 hr */
+hr {
+  border: none;
+  height: 1px;
+}
+/* 让非ie浏览器默认也显示垂直滚动条，防止因滚动条引起的闪烁 */
+html {
+  overflow-y: scroll;
+}
+/**/
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.clear {
+  clear: both;
+}
+.h30 {
+  height: 30px;
+}
+.mt3 {
+  margin-top: 3px;
+}
+.mt7 {
+  margin-top: 7px;
+}
+.mt10 {
+  margin-top: 10px;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.mr20 {
+  margin-right: 20px;
+}
+.ml10 {
+  margin-left: 10px;
+}
+.ml20 {
+  margin-left: 20px;
+}
+.w55 {
+  width: 55px;
+}
+.w220 {
+  width: 220px;
+}
+.w380 {
+  width: 380px;
+}
+.w393 {
+  width: 393px;
+}
+.w600 {
+  width: 600px;
+}
+.w940 {
+  width: 940px;
+}
+
+.body_bg{
+    background: url("../image/login_bg.png") no-repeat;
+    background-size: cover;
+}
+
+.login-container {
+    width: 425px;
+    position: absolute;
+    top: 20%;
+    right: 23%;
+    z-index: 10;
+}
+
+.login-header {
+    padding: 12px 20px;
+    background: -webkit-linear-gradient(top, #4A515B 0%,#3C4049 100%);
+    border-radius: 5px 5px 0 0;
+    text-shadow: 1px 1px 2px rgba(0,0,0,.5);
+}
+
+.login-header h3 {
+    margin-bottom: 0;
+    font-size: 16px;
+    color: #FFF;
+    line-height: 27px;
+    font-weight: 600;
+}
+
+.login-content {
+    padding: 20px;
+    background: #FFF;
+    border: 1px solid #DDD;
+    border-radius:0 0 5px 5px;
+    box-shadow: 0 0 6px rgba(0,0,0,.10);
+}
+
+.control-group {
+    margin-bottom: 9px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333333;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 18px;
+}
+
+.control-group input {
+    display: inline-block;
+    height: 18px;
+    width: 96%;
+    padding: 2% 2%;
+    margin-bottom: 9px;
+    color: #555555;
+    border: 1px solid #cccccc;
+    border-radius: 3px;
+}
+
+.left_div{
+    float:left;
+}
+
+.left_div label{
+    color: #333333;
+    font-size: 13px;
+    font-weight: normal;
+    line-height: 18px;
+}
+
+.right_div{
+    float:right;
+}
+
+#codeImg{
+    height: 34px;
+    vertical-align: middle;
+    padding-bottom: 4px;
+}
+
+.customBtn{
+    text-align: center;
+    display: inline-block;
+    line-height: 18px;
+    padding: 3px 12px;
+    *padding: 1px 12px 3px;
+    vertical-align: middle;
+    border-radius: 2px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.colourDarkBlue{
+    color: #fff;
+    background-color: #3598dc;
+    border-color: #2a80b9;
+}
+.colourDarkBlue:hover{
+    color: #fff;
+    text-decoration: none;
+    background-color: #2a80b9;
+    border-color: #2a80b9;
+}
+.colourDarkBlue:active{
+    color: #8BCCF6;
+    text-decoration: none;
+    background-color: #2a80b9;
+    border-color: #2a80b9;
+    box-shadow: inset 0 2px 3px #1e70a7;
+}

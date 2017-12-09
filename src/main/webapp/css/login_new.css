@@ -1,0 +1,9 @@
+body,html{width:100%;height:100%;font-family: arial,"微软雅黑", sans-serif;}
+.login_bg{width:100%;height:100%;background:url(../image/login_new/login_bg.jpg) center center no-repeat;background-size: cover;}
+.login_area{position:fixed;right:190px;top:calc(50% - 180px);width:450px;height:360px;background:url(../image/login_new/login_area.png) center center no-repeat;background-size: cover;color:#000;}
+.login_user{position:absolute;top:97px;left:146px;width:252px;height:38px;font-size: 18px;}
+.login_password{position:absolute;top:148px;left:146px;width:252px;height:38px;font-size: 18px;}
+.login_checked{position:absolute;top:197px;left:146px;width:142px;height:38px;font-size: 18px;}
+.login_img{position:absolute;top:199px;left:304px;width:93px;height:34px;}
+.login_btn{position:absolute;top:260px;left:147px;width:146px;height:50px;background-color:#e23d31;border-radius:5px;font-size: 22px;color: #fff;-webkit-box-shadow: 2px 3px 8px rgba(0,0,0,.6);box-shadow: 2px 3px 8px rgba(0,0,0,.6);border: none;}
+.login_btn:active{background-color:#f00;}

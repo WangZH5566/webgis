@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="exec.main" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseMain.jsp" />
+    </definition>
+    <definition name="exec.execLoad" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseLoad.jsp" />
+    </definition>
+    <definition name="exec.userPrint" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execisePrintUserLoad.jsp" />
+    </definition>
+    <definition name="exec.unitUser" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseUnitUser.jsp" />
+    </definition>
+    <definition name="exec.unitUserList" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseUnitUserList.jsp" />
+    </definition>
+    <definition name="exec.addStepOne" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseAddStepOne.jsp" />
+    </definition>
+    <definition name="exec.addStepTwo" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseAddStepTwo.jsp" />
+    </definition>
+    <definition name="exec.userLoad" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseUserLoad.jsp" />
+    </definition>
+    <definition name="exec.addStepThree" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseAddStepThree.jsp" />
+    </definition>
+    <definition name="exec.addStepFour" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseAddStepFour.jsp" />
+    </definition>
+    <definition name="exec.addStepFive" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseAddStepFive.jsp" />
+    </definition>
+    <definition name="exec.troopLoad" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseTroopLoad.jsp" />
+    </definition>
+    <definition name="exec.chooseIcon" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseChooseIcon.jsp" />
+    </definition>
+    <definition name="exec.addIcon" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseAddIcon.jsp" />
+    </definition>
+    <definition name="exec.editTroop" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseEditTroop.jsp" />
+    </definition>
+    <definition name="exec.iconAmmunitionSetting" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseIconAmmunitionSetting.jsp" />
+    </definition>
+    <definition name="exec.iconEquipmentSetting" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseIconEquipmentSetting.jsp" />
+    </definition>
+    <definition name="exec.iconRightSetting" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseIconRightSetting.jsp" />
+    </definition>
+    <definition name="exec.iconPlaneSetting" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseIconPlaneSetting.jsp" />
+    </definition>
+    <definition name="exec.review" extends="base2.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/execise/execiseReview.jsp" />
+    </definition>
+</tiles-definitions>

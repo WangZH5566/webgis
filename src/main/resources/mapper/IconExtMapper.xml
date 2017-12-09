@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.IconExtDao">
+    <select id="queryIconExt" resultType="com.ydh.model.IconExt">
+        select id as id
+        ,field_name as name
+        ,field_value as value
+        ,exec_icon_id as icon
+        from exec_icon_ext
+        where 1=1
+        <if test="_parameter!=null and _parameter!=''">
+            and exec_icon_id=#{icon}
+        </if>
+        ORDER BY name
+    </select>
+    <select id="findByID" resultType="com.ydh.model.IconExt">
+        select id as id
+        ,field_name as name
+        ,field_value as value
+        ,exec_icon_id as icon
+        from exec_icon_ext
+        where id=#{id}
+    </select>
+    <insert id="addIconExt" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.IconExt">
+        INSERT INTO exec_icon_ext(field_name,field_value,exec_icon_id) VALUES(#{name},#{value},#{icon})
+    </insert>
+
+    <update id="modifyIconExt" parameterType="com.ydh.model.IconExt">
+        update exec_icon_ext set field_name=#{name},field_value=#{value} where id=#{id}
+    </update>
+
+    <delete id="deleteByID" >
+        delete from exec_icon_ext where id=#{id}
+    </delete>
+</mapper>

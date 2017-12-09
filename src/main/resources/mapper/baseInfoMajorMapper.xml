@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.BaseInfoMajorDao">
+
+    <select id="queryAll" resultType="com.ydh.dto.BaseInfoMajorDto">
+        select id as id,major_name as majorName from exec_basic_info_major order by id
+    </select>
+
+    <select id="queryCount" parameterType="com.ydh.dto.BaseInfoMajorDto" resultType="java.lang.Integer">
+        select count(1) from exec_basic_info_major where 1=1
+        <if test="majorName != null and majorName !=''">
+            and major_name like CONCAT('%',#{majorName},'%')
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="com.ydh.dto.BaseInfoMajorDto" resultType="com.ydh.dto.BaseInfoMajorDto">
+        select id as id,major_name as majorName from exec_basic_info_major where 1=1
+        <if test="majorName != null and majorName !=''">
+            and major_name like CONCAT('%',#{majorName},'%')
+        </if>
+        order by id ${postgreSQLQueryPage}
+    </select>
+
+    <select id="queryById" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoMajorDto">
+        select id as id,major_name as majorName from exec_basic_info_major where id=#{0}
+    </select>
+
+    <select id="queryRepeation" parameterType="com.ydh.model.BasicInfoMajor" resultType="com.ydh.model.BasicInfoMajor">
+        select id as id,major_name as majorName from exec_basic_info_major where major_name=#{majorName}
+        <if test="id != null">
+            and id<![CDATA[<>]]>#{id}
+        </if>
+    </select>
+
+    <insert id="addBaseInfoMajor" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.BasicInfoMajor">
+        insert into exec_basic_info_major(major_name) values(#{majorName})
+    </insert>
+
+    <update id="modifyBaseInfoMajor" parameterType="com.ydh.model.BasicInfoMajor">
+        update exec_basic_info_major set major_name=#{majorName} where id=#{id}
+    </update>
+
+    <delete id="deleteBaseInfoMajor" parameterType="java.lang.Integer">
+        delete from exec_basic_info_major where id=#{0}
+    </delete>
+</mapper>

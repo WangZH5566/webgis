@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.DepartmentDao">
+
+    <select id="queryAll" resultType="com.ydh.model.Department">
+        SELECT id as id,department_name as departmentName,department_code as departmentCode,
+        is_cross_unit as isCrossUnit,is_delete as isDelete FROM exec_department ORDER BY id
+    </select>
+
+    <select id="queryAllDepartment" resultType="com.ydh.dto.DepartmentDto">
+        SELECT id as id,department_name as departmentName,department_code as departmentCode,
+        is_cross_unit as isCrossUnit FROM exec_department WHERE is_delete=0
+    </select>
+
+    <select id="queryByIdArr" parameterType="java.lang.Integer" resultType="com.ydh.dto.DepartmentDto">
+        SELECT id as id,department_name as departmentName,department_code as departmentCode,
+        is_cross_unit as isCrossUnit FROM exec_department WHERE is_delete=0 AND id IN 
+        <foreach collection="array" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryByIdList" parameterType="java.lang.Integer" resultType="com.ydh.dto.DepartmentDto">
+        SELECT id as id,department_name as departmentName,department_code as departmentCode,
+        is_cross_unit as isCrossUnit FROM exec_department WHERE is_delete=0 AND id IN
+        <foreach collection="list" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryCount" parameterType="com.ydh.dto.DepartmentDto" resultType="java.lang.Integer">
+        select count(1) from exec_department where is_delete=0
+        <if test="departmentName != null and departmentName !=''">
+            and department_name like CONCAT('%',#{departmentName},'%')
+        </if>
+        <if test="departmentCode != null and departmentCode !=''">
+            and department_code like CONCAT('%',#{departmentCode},'%')
+        </if>
+    </select>
+
+    <select id="queryPage" parameterType="com.ydh.dto.DepartmentDto" resultType="com.ydh.dto.DepartmentDto">
+        select id as id,department_name as departmentName,department_code as departmentCode,
+        is_cross_unit as isCrossUnit from exec_department where is_delete=0
+        <if test="departmentName != null and departmentName !=''">
+            and department_name like CONCAT('%',#{departmentName},'%')
+        </if>
+        <if test="departmentCode != null and departmentCode !=''">
+            and department_code like CONCAT('%',#{departmentCode},'%')
+        </if>
+        order by id ${postgreSQLQueryPage}
+    </select>
+
+    <select id="queryById" parameterType="java.lang.Integer" resultType="com.ydh.dto.DepartmentDto">
+        select id as id,department_name as departmentName,department_code as departmentCode,
+        is_cross_unit as isCrossUnit
+        from exec_department where id=#{0}
+    </select>
+
+    <select id="queryRepeation" parameterType="com.ydh.model.Department" resultType="com.ydh.model.Department">
+        select id as id,department_name as departmentName,department_code as departmentCode,
+        is_cross_unit as isCrossUnit
+        from exec_department where is_delete=0 and (department_name=#{departmentName} or department_code=#{departmentCode})
+        <if test="id != null">
+            and id<![CDATA[<>]]>#{id}
+        </if>
+    </select>
+
+    <insert id="addDepartment" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.Department">
+        insert into exec_department(department_name,department_code,is_cross_unit,is_delete)
+        values(#{departmentName},#{departmentCode},#{isCrossUnit},0)
+    </insert>
+    
+    <update id="modifyDepartment" parameterType="com.ydh.model.Department">
+        update exec_department set department_name=#{departmentName},department_code=#{departmentCode},
+        is_cross_unit=#{isCrossUnit} where id=#{id}
+    </update>
+
+    <update id="deleteDepartment" parameterType="java.lang.Integer">
+        update exec_department set is_delete=1 where id=#{0}
+    </update>
+</mapper>

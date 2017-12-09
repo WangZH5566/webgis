@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.IconDao">
+    <select id="findAll" resultType="com.ydh.model.Icon">
+        select id as id
+        ,icon_path as path
+        ,deleted as deleted
+        from exec_icon where deleted = 0
+    </select>
+
+    <insert id="addIcon" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.Icon">
+        INSERT INTO exec_icon(icon_path,deleted,name,has_speed,has_damage,speed,speed_unit,damage_level,damage_level_time,icon_group_id)
+        VALUES(#{path},#{deleted},#{name},#{hasSpeedInt},#{hasDamageInt},#{speed},#{speedUnit},#{damageLevel},#{damageLevelTime},#{iconGroup})
+    </insert>
+
+    <update id="deleteByID">
+        UPDATE exec_icon SET deleted = 1 WHERE id = #{id}
+    </update>
+
+    <update id="deleteByPath">
+        UPDATE exec_icon SET deleted = 1 WHERE icon_path = #{path}
+    </update>
+
+    <update id="deleteByGroup">
+        UPDATE exec_icon SET deleted = 1 WHERE icon_group_id = #{groupID}
+    </update>
+
+    <select id="queryIconListCount" parameterType="com.ydh.dto.IconDto" resultType="java.lang.Integer">
+        select count(1) from exec_icon where (deleted is null or deleted=0)
+        <if test="groupArray!=null and groupArray!=''">
+            and icon_group_id IN (${groupArray})
+        </if>
+    </select>
+
+    <select id="queryIconListPage" parameterType="com.ydh.dto.IconDto" resultType="com.ydh.dto.IconDto">
+        select id as id,name as name,icon_path as iconPath,has_speed as hasSpeed,has_damage as hasDamage,speed as speed,speed_unit as speedUnit,
+        damage_level as damageLevel,damage_level_time as damageLevelTime,icon_group_id as iconGroup
+        from exec_icon where (deleted is null or deleted=0)
+        <if test="groupArray!=null and groupArray!=''">
+            and icon_group_id IN (${groupArray})
+        </if>
+        order by name ${postgreSQLQueryPage}
+    </select>
+
+    <select id="findByID" resultType="com.ydh.dto.IconDto">
+        select id as id,name as name,icon_path as iconPath,has_speed as hasSpeed,has_damage as hasDamage,speed as speed,speed_unit as speedUnit,
+        damage_level as damageLevel,damage_level_time as damageLevelTime,icon_group_id as iconGroup
+        from exec_icon where (deleted is null or deleted=0)
+        and id=#{id}
+    </select>
+
+    <delete id="deleteIconExtByIcon">
+        delete from exec_icon_ext where exec_icon_id=#{id}
+    </delete>
+
+    <update id="updateIcon" parameterType="com.ydh.model.Icon">
+        UPDATE exec_icon SET has_speed=#{hasSpeedInt},has_damage=#{hasDamageInt},speed=#{speed},speed_unit=#{speedUnit},damage_level=#{damageLevel},damage_level_time=#{damageLevelTime}
+        where id=#{id}
+    </update>
+</mapper>

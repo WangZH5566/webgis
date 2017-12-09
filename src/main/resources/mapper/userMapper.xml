@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.UserDao">
+
+    <select id="queryLoginUser" parameterType="java.lang.String" resultType="com.ydh.model.User">
+        SELECT u.id as id,u.login_name as loginName,u.user_name as userName,
+        u.password as pwd,null as unitId,null as departmentId,
+        null as unitName,null as departmentName,null as execId,
+        0 as isDirector,1 as isAdmin,0 as isCrossUnit,0 as execStatus FROM exec_user u where u.login_name=#{0}
+        union
+        SELECT eu.id as id,eu.login_name as loginName,eu.user_name as userName,
+        eu.new_password as pwd,eu.unit_id as unitId,eu.department_id as departmentId,
+        u.unit_name as unitName,d.department_name as departmentName,
+        eu.exec_id as execId,eu.is_director as isDirector,0 as isAdmin,eu.is_cross_unit as isCrossUnit,
+        e.exec_status as execStatus from exec_execise_user eu
+        inner join exec_execise e on e.id=eu.exec_id
+        left join exec_department d on d.id=eu.department_id
+        left join exec_unit u on u.id=eu.unit_id
+        where eu.login_name=#{0}
+    </select>
+</mapper>

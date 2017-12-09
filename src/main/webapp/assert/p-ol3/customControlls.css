@@ -1,0 +1,210 @@
+.cc-div{
+    position: relative;
+    top: 8px;
+    left: 5px;
+    z-index: 5;
+    padding: 2px 0;
+    height: 24px;
+    line-height: 20px;
+    background: rgba(0, 60, 136, .3);
+    color: #eee;
+    display: none;
+    width:100%;
+}
+
+.cc-div ul.cc-tools{
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-right: 1px solid #eee;
+    font-size: 14px;
+    font-weight: 700;
+
+}
+
+.cc-div ul.cc-tools:after{
+    content: "";
+    clear: both;
+}
+
+.cc-div ul.cc-tools a{
+    display: inline-block;
+    float: left;
+    min-width: 24px;
+    height: 20px;
+    padding:0 2px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #eee;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+.cc-div ul.cc-tools a:hover{
+    color: #fff;
+    background: rgba(19, 43, 72, 0.3);
+}
+
+/*有用的,不要删除*/
+.cc-div ul.cc-tools a.cc-a-tmp{
+
+}
+
+
+.cc-div .cc-click-div{
+    float: left;
+    padding: 0 6px;
+    border-right: 1px solid #eee;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cc-div .cc-click-div:hover{
+    color: #fff;
+}
+
+.cc-div .cc-select-div{
+    float: left;
+    padding: 0 8px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cc-div .cc-select-div:hover{
+    color: #fff;
+}
+
+.cc-div ul.cc-select-detail{
+    position: absolute;
+    top: 24px;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    width: 44px;
+    background: rgba(0, 60, 136, .3);
+    color: #eee;
+    list-style: none;
+    display: none;
+}
+
+.cc-div ul.cc-select-detail li{
+    margin: 3px 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.cc-div ul.cc-select-detail .select-bg{
+    background: rgba(19, 43, 72, 0.3);
+}
+
+.cc-div ul.cc-select-detail li:hover{
+    color: #fff;
+}
+
+
+
+/* popup框 */
+.ol-popup {
+    position: absolute;
+    background-color: white;
+    -webkit-filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    bottom: 12px;
+    left: -50px;
+    min-width: 300px;
+}
+.ol-popup:after, .ol-popup:before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.ol-popup:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+.ol-popup:before {
+    border-top-color: #cccccc;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+}
+.ol-popup-closer {
+    text-decoration: none;
+    position: absolute;
+    top: 2px;
+    right: 8px;
+}
+.ol-popup-closer:after {
+    content: "✖";
+}
+
+/* 图标列表的图标样式 */
+.icon-outer{
+    margin: 4px;
+    width: 90px;
+    height: 115px;
+    position: relative;
+    float: left;
+    overflow: hidden;
+}
+.icon-outer .icon-inner{
+    border: solid 5px #fff;
+    padding: 2px 2px;
+}
+.icon-outer .icon-inner img{
+    width: 76px;
+    height:76px;
+}
+.icon-outer label{
+    margin-top: 5px;
+}
+
+.icon-outer.selected div.icon-inner{
+    border-color: #99a3fd;
+}
+
+/* 测距 */
+.tooltip {
+    position: relative;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    color: white;
+    padding: 4px 8px;
+    opacity: 0.7;
+    white-space: nowrap;
+}
+.tooltip-measure {
+    opacity: 1;
+    font-weight: bold;
+}
+.tooltip-static {
+    background-color: #ffcc33;
+    color: black;
+    border: 1px solid white;
+}
+.tooltip-measure:before,
+.tooltip-static:before {
+    border-top: 6px solid rgba(0, 0, 0, 0.5);
+    border-right: 6px solid transparent;
+    border-left: 6px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    margin-left: -7px;
+    left: 50%;
+}
+.tooltip-static:before {
+    border-top-color: #ffcc33;
+}

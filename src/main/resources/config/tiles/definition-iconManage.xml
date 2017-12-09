@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<definition name="iconManage.main" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/iconManage/main.jsp" />
+    </definition>
+
+    <definition name="iconManage.addIconPage" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/iconManage/addIcon.jsp" />
+    </definition>
+    <definition name="iconManage.editIconPage" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/iconManage/editIcon.jsp" />
+    </definition>
+    <definition name="iconManage.addFieldPage" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/iconManage/addField.jsp" />
+    </definition>
+
+    <definition name="iconManage.iconList" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/iconManage/iconList.jsp" />
+    </definition>
+
+    <definition name="iconManage.execIcon" extends="empty.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/iconManage/execIcon.jsp" />
+    </definition>
+
+    <definition name="iconManage.upload.result" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/iconManage/iconUploadResult.jsp" />
+    </definition>
+</tiles-definitions>

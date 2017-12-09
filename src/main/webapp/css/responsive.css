@@ -1,0 +1,21 @@
+/* Responsive design */
+@media (max-width: 970px) {
+    .content {
+        margin-top:0px;
+        margin-left:43px;
+    }
+
+    .sidebar, .sidebar > ul {
+         width: 43px;
+         display: block;
+     }
+    .sidebar > a {
+        display: none !important;
+    }
+    .sidebar > ul > li.open.submenu > a {
+        border-bottom: none !important;
+    }
+    .sidebar > ul > li > a > span, .sidebar > ul ul > li > a > span{
+        display: none;
+    }
+}

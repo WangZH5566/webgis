@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.HistoryLogDao">
+
+    <select id="queryAll" resultType="com.ydh.model.HistoryLog">
+        select   l.id as id
+                , l.exec_id as execId
+                , l.create_by as createBy
+                , l.create_time as createTime
+                , l.last_update_by as lastUpdateBy
+                , l.last_update_time as lastUpdateTime
+                , l.content as content
+                , l.fight_time as fightTime
+        from exec_history_log l ORDER  BY l.fight_time
+    </select>
+
+    <select id="queryByExecId" resultType="com.ydh.dto.HistoryLogDto" parameterType="java.lang.Integer">
+        select  l.id as id
+        , l.exec_id as execId
+        , l.content as content
+        , l.fight_time as fightTime
+        from exec_history_log l
+        where l.exec_id = #{exec_id} ORDER  BY l.fight_time
+    </select>
+
+    <insert id="addHistoryLog" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.HistoryLog">
+        INSERT INTO exec_history_log(exec_id,create_by, create_time, content,fight_time)
+        VALUES(#{execId},#{createBy},#{createTime},#{content},#{fightTime})
+    </insert>
+
+    <select id="queryHistoryLogCountForPage" parameterType="com.ydh.dto.HistoryLogDto" resultType="java.lang.Integer">
+        select count(1) from exec_history_log where exec_id=#{execId}
+    </select>
+
+    <select id="queryHistoryLogPage" parameterType="com.ydh.dto.HistoryLogDto" resultType="com.ydh.dto.HistoryLogDto">
+        select ehl.id as id,ehl.create_time as createTime,eeu.user_name as createUserName,ehl.content as content,ehl.fight_time as fightTime
+        from exec_history_log ehl
+        LEFT JOIN exec_execise_user eeu ON eeu.id=ehl.create_by
+        where ehl.exec_id=#{execId}
+        order by ehl.fight_time desc ${postgreSQLQueryPage}
+    </select>
+</mapper>

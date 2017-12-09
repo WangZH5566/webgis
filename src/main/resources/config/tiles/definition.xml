@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="empty.definition" template="/layout/empty_layout.jsp"/>
+
+    <definition name="base.definition" template="/layout/default_layout.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="header" value="/common/header.jsp" />
+        <put-attribute name="body" value="" />
+        <put-attribute name="left" value="/common/left.jsp"/>
+    </definition>
+
+
+    <definition name="base2.definition" template="/layout/without_left_layout.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="header" value="/common/header.jsp" />
+        <put-attribute name="body" value="" />
+    </definition>
+    
+    <definition name="win.definition" template="/layout/win_layout.jsp"></definition>
+    
+    <definition name="treeGrid.definition" template="/layout/treeGrid_layout.jsp">
+    	<put-attribute name="title" value="" />
+        <put-attribute name="header" value="/common/header.jsp" />
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/common/footer.jsp"/>
+    </definition>
+</tiles-definitions>

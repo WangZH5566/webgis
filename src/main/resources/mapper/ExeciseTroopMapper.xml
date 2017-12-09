@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseTroopDao">
+
+
+    <select id="queryById" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseTroopDto">
+        select t.id as id,t.exec_id as execId,t.icon_id as iconId,t.icon_name as iconName,t.icon_data as iconData,t.speed as speed,
+        t.color_array as colorArray,t.base_info_id as baseInfoId,t.main_type as mainType,t.speed_unit as speedUnit,
+        t.max_speed as maxSpeed,t.belong_airport as belongAirport,t.unit_id as unitId,t.move_angle as moveAngle,
+        t.longitude as longitude,t.latitude as latitude
+        from exec_execise_troop t WHERE t.id=#{0}
+    </select>
+
+    <select id="queryByExecId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseTroopDto">
+        select t.id as id,t.exec_id as execId,t.icon_id as iconId,t.icon_name as iconName,t.icon_data as iconData,t.speed as speed,
+        t.color_array as colorArray,t.base_info_id as baseInfoId,t.main_type as mainType,t.speed_unit as speedUnit,
+        t.max_speed as maxSpeed,t.belong_airport as belongAirport,t.unit_id as unitId,t.move_angle as moveAngle,
+        t.longitude as longitude,t.latitude as latitude
+        from exec_execise_troop t WHERE t.exec_id=#{0}
+    </select>
+
+    <select id="queryByByAirportId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseTroopDto">
+        select t.id as id,t.exec_id as execId,t.icon_id as iconId,t.icon_name as iconName,t.icon_data as iconData,t.speed as speed,
+        t.color_array as colorArray,t.base_info_id as baseInfoId,t.main_type as mainType,t.speed_unit as speedUnit,
+        t.max_speed as maxSpeed,t.belong_airport as belongAirport,t.unit_id as unitId,t.move_angle as moveAngle,
+        t.longitude as longitude,t.latitude as latitude
+        from exec_execise_troop t WHERE t.belong_airport=#{0}
+    </select>
+
+    <select id="queryExeciseTroopCount" parameterType="com.ydh.dto.ExeciseTroopDto" resultType="java.lang.Integer">
+        select count(1) from exec_execise_troop t
+        inner join exec_basic_info bi on bi.id=t.base_info_id
+        inner join exec_basic_info_type bity on bity.id=bi.type_id
+        left join exec_unit u on u.id=t.unit_id
+        <where>
+            <if test="execId != null">
+                t.exec_id=#{execId}
+            </if>
+            <if test="mainType != null">
+                and t.main_type=#{mainType}
+            </if>
+        </where>
+        <!--<if test="execiseName != null and execiseName !=''">
+            and execise_name like CONCAT('%',#{execiseName},'%')
+        </if>
+        <if test="execStatus != null">
+            and exec_status = #{execStatus}
+        </if>-->
+    </select>
+
+    <select id="queryExeciseTroopPage" parameterType="com.ydh.dto.ExeciseTroopDto" resultType="com.ydh.dto.ExeciseTroopDto">
+        select t.id as id,t.exec_id as execId,t.icon_id as iconId,t.icon_name as iconName,t.icon_data as iconData,t.speed as speed,
+        t.color_array as colorArray,t.base_info_id as baseInfoId,t.main_type as mainType,t.speed_unit as speedUnit,
+        t.max_speed as maxSpeed,t.belong_airport as belongAirport,t.unit_id as unitId,t.move_angle as moveAngle,
+        bity.type_name as typeName,et.icon_name as belongAirportName,u.unit_name as unitName
+        from exec_execise_troop t
+        inner join exec_basic_info bi on bi.id=t.base_info_id
+        inner join exec_basic_info_type bity on bity.id=bi.type_id
+        left join exec_unit u on u.id=t.unit_id
+        left join exec_execise_troop et on et.id=t.belong_airport
+        <where>
+            <if test="execId != null">
+                t.exec_id=#{execId}
+            </if>
+            <if test="mainType != null">
+                and t.main_type=#{mainType}
+            </if>
+        </where>
+        order by t.id desc ${postgreSQLQueryPage}
+    </select>
+
+    <insert id="addExeciseTroop" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseTroop">
+         INSERT INTO exec_execise_troop(exec_id,icon_id,icon_name,icon_data,speed,color_array,
+         base_info_id,main_type,speed_unit,max_speed,belong_airport,unit_id,move_angle)
+         VALUES(#{execId},#{iconId},#{iconName},#{iconData},#{speed},#{colorArray},#{baseInfoId},
+         #{mainType},#{speedUnit},#{maxSpeed},#{belongAirport},#{unitId},#{moveAngle})
+    </insert>
+
+    <update id="modifyExeciseTroop" parameterType="com.ydh.model.ExeciseTroop">
+        update exec_execise_troop SET speed=#{speed},unit_id=#{unitId},
+        move_angle=#{moveAngle},longitude=#{longitude},
+        latitude=#{latitude} where id=#{id}
+    </update>
+
+    <update id="modifyExeciseTroopWhenAirport" parameterType="com.ydh.model.ExeciseTroop">
+        update exec_execise_troop SET unit_id=#{unitId} where belong_airport=#{id}
+    </update>
+
+
+    <delete id="deleteExeciseTroopById" parameterType="java.lang.Integer">
+        DELETE from exec_execise_troop where id=#{0}
+    </delete>
+
+    <delete id="deleteExeciseTroopByAirportId" parameterType="java.lang.Integer">
+        DELETE from exec_execise_troop where belong_airport=#{0}
+    </delete>
+
+    <select id="queryMainTypeByExecId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT DISTINCT main_type from exec_execise_troop WHERE exec_id=#{0} ORDER BY main_type
+    </select>
+</mapper>

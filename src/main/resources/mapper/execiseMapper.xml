@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseDao">
+
+    <select id="queryExecCount" parameterType="com.ydh.dto.ExeciseDto" resultType="java.lang.Integer">
+        select count(1) from exec_execise where 1=1
+        <if test="execiseName != null and execiseName !=''">
+            and execise_name like CONCAT('%',#{execiseName},'%')
+        </if>
+        <if test="execStatus != null">
+            and exec_status = #{execStatus}
+        </if>
+    </select>
+
+    <!--array_to_string(ARRAY(SELECT eu.user_name from exec_execise_user eu where eu.exec_id=e.id),',') as participants-->
+    <select id="queryExecPage" parameterType="com.ydh.dto.ExeciseDto" resultType="com.ydh.dto.ExeciseDto">
+        select e.id as id,e.execise_name as execiseName,e.sea_chart as seaChart,sc.sea_chart_name as seaChartName,
+        e.begin_time as beginTime,e.end_time as endTime,e.comment as comment,e.create_time as createTime,
+        e.exec_status as execStatus,e.fight_time as fightTime
+        from exec_execise e
+        left join exec_sea_chart sc on sc.id=e.sea_chart
+        where 1=1
+        <if test="execiseName != null and execiseName !=''">
+            and e.execise_name like CONCAT('%',#{execiseName},'%')
+        </if>
+        <if test="execStatus != null">
+            and exec_status = #{execStatus}
+        </if>
+        order by e.id desc ${postgreSQLQueryPage}
+    </select>
+
+    <select id="queryByLoginUser"  parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseDto">
+      select e.id as id,e.execise_name as execiseName,e.sea_chart as seaChart,sc.sea_chart_name as seaChartName,
+        e.begin_time as beginTime,e.end_time as endTime,e.comment as comment,e.create_time as createTime,
+        array_to_string(ARRAY(SELECT eu.user_name from exec_execise_user eu where eu.exec_id=e.id),',') as participants
+      from exec_execise e
+      left join exec_sea_chart sc on sc.id=e.sea_chart
+      where e.id in (select exec_id from exec_execise_user where id = #{userid})
+    </select>
+
+    <select id="queryById" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseDto">
+        select e.id as id,e.execise_name as execiseName,e.sea_chart as seaChart,e.exec_status as execStatus,e.create_time as createTime,
+        e.begin_time as beginTime,e.end_time as endTime,e.comment as comment,eu.id as directorId,
+        eu.login_name as directorLoginName,eu.user_name as directorUserName,eu.old_password as directorPassword,
+        eu.cur_date as curDate,eu.serial_no as serialNo,e.fight_time as fightTime,e.step_length as stepLength,e.is_pause as isPause,
+        e.ft_hide_digit as ftHideDigit,e.end_fight_time as endFightTime from exec_execise e
+        inner join exec_execise_user eu on eu.exec_id=e.id and eu.is_director=1
+        where e.id=#{0}
+    </select>
+
+    <select id="queryExeciseUnit" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseUnit">
+        select u.id as id,u.unit_name as unitName,u.pid as pid,u.exec_id as execId from exec_unit u where u.exec_id=#{0} ORDER BY id
+    </select>
+
+    <select id="queryExeciseDepartment" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseDepartment">
+        SELECT id as id,department_name as departmentName,department_code as departmentCode,is_cross_unit as isCrossUnit,
+        department_id as departmentId,unit_id as unitId FROM exec_execise_department where exec_id=#{0} ORDER BY id
+    </select>
+
+    <select id="queryExeciseUser" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseUser">
+        select eu.id as id,eu.exec_id as execId,eu.login_name as loginName,eu.user_name as userName,
+        eu.old_password as oldPassword,eu.new_password as newPassword,eu.unit_id as unitId,
+        eu.department_id as departmentId,eu.is_director as isDirector,eu.cur_date as curDate,eu.serial_no as serialNo,
+        eu.is_cross_unit as isCrossUnit from exec_execise_user eu where eu.exec_id=#{0}
+    </select>
+
+    <select id="queryMaxSerialNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select max(serial_no) from exec_execise_user where cur_date=#{0}
+    </select>
+
+    <select id="queryExecUserPrint" parameterType="com.ydh.dto.ExeciseUserDto" resultType="com.ydh.dto.ExeciseUserDto">
+        select eu.id as id,eu.exec_id as execId,eu.login_name as loginName,eu.user_name as userName,
+        eu.old_password as oldPassword,eu.new_password as newPassword,eu.unit_id as unitId,
+        u.unit_name as unitName,eu.department_id as departmentId,d.department_name as departmentName,
+        eu.is_director as isDirector,eu.cur_date as curDate,eu.serial_no as serialNo,eu.is_cross_unit as isCrossUnit
+        from exec_execise_user eu
+        left join exec_unit u on u.id=eu.unit_id
+        left join exec_execise_department d on d.id=eu.department_id
+        where eu.exec_id=#{execId} order by eu.unit_id,eu.department_id,eu.id
+    </select>
+
+    <insert id="addExecise" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.Execise">
+        INSERT INTO exec_execise(execise_name,comment,exec_status,fight_time,step_length,is_pause,ft_hide_digit,create_time,create_by)
+        VALUES(#{execiseName},#{comment},#{execStatus},#{fightTime},#{stepLength},#{isPause},#{ftHideDigit},#{createTime},#{createBy})
+    </insert>
+
+    <update id="modifyExecise" parameterType="com.ydh.model.Execise">
+        update exec_execise set execise_name=#{execiseName},comment=#{comment},fight_time=#{fightTime},
+        ft_hide_digit=#{ftHideDigit},last_update_time=#{lastUpdateTime},last_update_by=#{lastUpdateBy} where id=#{id}
+    </update>
+
+    <delete id="deleteExecise" parameterType="java.lang.Integer">
+        delete from exec_execise where id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="addExeciseUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseUser">
+        INSERT INTO exec_execise_user(exec_id,login_name,user_name,old_password,new_password,unit_id,department_id,
+        is_director,cur_date,serial_no,is_cross_unit) VALUES(#{execId},#{loginName},#{userName},
+        #{oldPassword},#{newPassword},#{unitId},#{departmentId},#{isDirector},#{curDate},#{serialNo},#{isCrossUnit})
+    </insert>
+
+    <update id="modifyExeciseDirector" parameterType="com.ydh.model.ExeciseUser">
+        update exec_execise_user set
+        login_name=#{loginName},
+        user_name=#{userName},
+        old_password=#{oldPassword},
+        new_password=#{newPassword}
+        where id=#{id}
+    </update>
+
+    <insert id="addExeciseUnit" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseUnit">
+        INSERT INTO exec_unit(unit_name,pid,exec_id) VALUES(#{unitName},#{pid},#{execId})
+    </insert>
+
+    <update id="modifyExeciseUnit" parameterType="com.ydh.model.ExeciseUnit">
+        update exec_unit set pid=#{pid},unit_name=#{unitName} where id=#{id}
+    </update>
+
+    <insert id="addExeciseDepartment" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseDepartment">
+        INSERT INTO exec_execise_department(department_name,department_code,is_cross_unit,exec_id,department_id,unit_id)
+        VALUES(#{departmentName},#{departmentCode},#{isCrossUnit},#{execId},#{departmentId},#{unitId})
+    </insert>
+
+    <delete id="deleteExeciseUserByArr" parameterType="java.lang.Integer">
+        delete from exec_execise_user where exec_id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+          #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExeciseUserByMap" parameterType="java.util.Map">
+        delete from exec_execise_user where exec_id=#{execId} and unit_id in
+        <foreach collection="uIdList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExeciseUnitByArr" parameterType="java.lang.Integer">
+        delete from exec_unit where exec_id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExeciseDeByArr" parameterType="java.lang.Integer">
+        delete from exec_execise_department where exec_id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExeciseUnitByMap" parameterType="java.util.Map">
+        delete from exec_unit where exec_id=#{execId} and id in
+        <foreach collection="uIdList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExeciseDepartmentByMap" parameterType="java.util.Map">
+        delete from exec_execise_department where exec_id=#{execId} and unit_id in
+        <foreach collection="uIdList" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExeciseUserByEdIdList" parameterType="java.util.List">
+        delete from exec_execise_user where department_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExeciseDepartmentByEdId" parameterType="java.util.List">
+        delete from exec_execise_department where id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="queryExecUserCount" parameterType="com.ydh.dto.ExeciseUserDto" resultType="java.lang.Integer">
+        select count(1) from exec_execise_user where exec_id=#{execId}
+        <if test="isDirector != null">
+            and is_director=#{isDirector}
+        </if>
+        <if test="unitArray!=null and unitArray!=''">
+            and unit_id IN (${unitArray})
+        </if>
+    </select>
+
+    <select id="queryExecUserPage" parameterType="com.ydh.dto.ExeciseUserDto" resultType="com.ydh.dto.ExeciseUserDto">
+        select eu.id as id,eu.exec_id as execId,eu.login_name as loginName,eu.user_name as userName,
+        eu.old_password as oldPassword,eu.new_password as newPassword,eu.unit_id as unitId,
+        u.unit_name as unitName,eu.department_id as departmentId,d.department_name as departmentName,
+        eu.is_director as isDirector,eu.cur_date as curDate,eu.serial_no as serialNo,eu.is_cross_unit as isCrossUnit
+        from exec_execise_user eu
+        left join exec_unit u on u.id=eu.unit_id
+        left join exec_execise_department d on d.id=eu.department_id
+        where eu.exec_id=#{execId}
+        <if test="isDirector != null">
+            and is_director=#{isDirector}
+        </if>
+        <if test="unitArray!=null and unitArray!=''">
+            and eu.unit_id IN (${unitArray})
+        </if>
+        order by eu.unit_id,eu.department_id,eu.id ${postgreSQLQueryPage}
+    </select>
+
+    <update id="modifyExeciseUser" parameterType="com.ydh.dto.ExeciseUserDto">
+        update exec_execise_user set login_name=#{loginName},user_name=#{userName},old_password=#{oldPassword},
+        new_password=#{newPassword},is_cross_unit=#{isCrossUnit} where id=#{id}
+    </update>
+
+    <update id="modifyExeciseSeaChart" parameterType="com.ydh.dto.ExeciseDto">
+        update exec_execise set sea_chart=#{seaChart} where id=#{id}
+    </update>
+
+    <delete id="deleteExeciseUser" parameterType="java.lang.Integer">
+        delete from exec_execise_user where id=#{0}
+    </delete>
+
+    <update id="modifyExeciseStatus" parameterType="com.ydh.model.Execise">
+        update exec_execise set
+        <if test="beginTime != null">
+            begin_time=#{beginTime},
+        </if>
+        <if test="stepLength != null">
+            step_length=#{stepLength},
+        </if>
+        <if test="endTime != null">
+            end_time=#{endTime},
+        </if>
+        <if test="execStatus != null">
+            exec_status=#{execStatus},
+        </if>
+        <if test="endFightTime != null">
+            end_fight_time=#{endFightTime},
+        </if>
+        last_update_time=#{lastUpdateTime},
+        last_update_by=#{lastUpdateBy} where id=#{id}
+    </update>
+
+    <update id="modifyExecisePause" parameterType="com.ydh.model.Execise">
+        update exec_execise set
+        <if test="stepLength != null">
+            step_length=#{stepLength},
+        </if>
+        is_pause=#{isPause} where id=#{id}
+    </update>
+
+    <select id="queryExecUserForSendTelegram" parameterType="com.ydh.dto.ExeciseUserDto" resultType="com.ydh.dto.ExeciseUserDto">
+        select eu.id as id,eu.exec_id as execId,eu.login_name as loginName,eu.user_name as userName,
+        eu.old_password as oldPassword,eu.new_password as newPassword,eu.unit_id as unitId,
+        u.unit_name as unitName,eu.department_id as departmentId,d.department_name as departmentName,
+        eu.is_director as isDirector,eu.cur_date as curDate,eu.serial_no as serialNo,eu.is_cross_unit as isCrossUnit
+        from exec_execise_user eu
+        left join exec_unit u on u.id=eu.unit_id
+        left join exec_execise_department d on d.id=eu.department_id
+        where eu.exec_id=#{execId} and eu.id<![CDATA[<>]]>#{id}
+        <if test="unitId != null">
+            and (eu.unit_id=#{unitId} OR eu.unit_id IS NULL)
+        </if>
+        order by eu.id
+    </select>
+
+    <select id="queryExceptCurrent" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseDto">
+        select e.id as id,e.execise_name as execiseName from exec_execise e where e.id <![CDATA[<>]]> #{0}
+    </select>
+</mapper>

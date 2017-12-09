@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.ExeciseIconDao">
+
+    <select id="findExeciseIconByExecId" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconDto">
+        select ei.id as id,ei.exec_id as execId,ei.icon_name as iconName,ei.icon_data as iconData,ei.speed as speed,
+        ei.max_speed as maxSpeed,ei.speed_unit as speedUnit,ei.damage as damage,ei.damage_time as damageTime,
+        ei.damage_detail as damageDetail,ei.add_equipment_time as addEquipmentTime,
+        ei.newest_coordinate as newestCoordinate,ei.color_array as colorArray,ei.belong_airport as belongAirport,
+        ei.unit_id as unitId,ei.base_info_id as baseInfoId,ei.main_type as mainType,ei.icon_type as iconType,
+        ei.icon_id as iconId,d.damage_name as damageCont,icc.id as crowdId,icc.crowd_name as crowdName,icd.is_main as isMain
+        from exec_execise_icon ei
+        left join exec_damage d on d.id=ei.damage
+        left join exec_execise_icon_crowd_detail icd on icd.icon_id=ei.id
+        left join exec_execise_icon_crowd icc on icc.id=icd.crowd_id
+        where ei.exec_id=#{0} and (is_delete is null or is_delete=0)
+    </select>
+
+    <select id="findExeciseIconByIds" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconDto">
+        select ei.id as id,ei.exec_id as execId,ei.icon_name as iconName,ei.icon_data as iconData,ei.speed as speed,
+        ei.max_speed as maxSpeed,ei.speed_unit as speedUnit,ei.damage as damage,ei.damage_time as damageTime,
+        ei.damage_detail as damageDetail,ei.add_equipment_time as addEquipmentTime,
+        ei.newest_coordinate as newestCoordinate,ei.color_array as colorArray,ei.belong_airport as belongAirport,
+        ei.unit_id as unitId,ei.base_info_id as baseInfoId,ei.main_type as mainType,ei.icon_type as iconType,
+        ei.icon_id as iconId,d.damage_name as damageCont,icc.id as crowdId,icc.crowd_name as crowdName,icd.is_main as isMain
+        from exec_execise_icon ei
+        left join exec_damage d on d.id=ei.damage
+        left join exec_execise_icon_crowd_detail icd on icd.icon_id=ei.id
+        left join exec_execise_icon_crowd icc on icc.id=icd.crowd_id
+        where (is_delete is null or is_delete=0) and ei.id in 
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findExeciseIconByExecIdForUsed" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconDto">
+        select ei.id as id,ei.exec_id as execId,ei.icon_name as iconName,ei.icon_data as iconData,
+        ei.unit_id as unitId,ei.base_info_id as baseInfoId,ei.main_type as mainType,ei.icon_type as iconType,
+        ei.icon_id as iconId from exec_execise_icon ei
+        where ei.exec_id=#{0} and (is_delete is null or is_delete=0)
+    </select>
+
+    <select id="findExeciseIconById" parameterType="java.lang.Integer" resultType="com.ydh.dto.ExeciseIconDto">
+        select ei.id as id,ei.exec_id as execId,ei.icon_name as iconName,ei.icon_data as iconData,ei.speed as speed,
+        ei.max_speed as maxSpeed,ei.speed_unit as speedUnit,ei.damage as damage,ei.damage_time as damageTime,
+        ei.damage_detail as damageDetail,ei.add_equipment_time as addEquipmentTime,
+        ei.newest_coordinate as newestCoordinate,ei.color_array as colorArray,ei.belong_airport as belongAirport,
+        ei.icon_id as iconId,ic.icon_group_id as iconGroupId,ei.color_array as colorArray,ei.unit_id as unitId,ei.base_info_id as baseInfoId,ei.main_type as mainType
+        from exec_execise_icon ei
+        inner join exec_icon ic on ic.id=ei.icon_id
+        where ei.id=#{0}
+    </select>
+
+    <select id="findExeciseIcon" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseIcon">
+        select ei.id as id,ei.exec_id as execId,ei.icon_name as iconName,ei.icon_data as iconData,
+        ei.speed as speed,ei.max_speed as maxSpeed,ei.speed_unit as speedUnit,ei.damage as damage,
+        ei.damage_time as damageTime,ei.damage_detail as damageDetail,ei.add_equipment_time as addEquipmentTime,
+        ei.newest_coordinate as newestCoordinate,ei.label_by as labelBy,ei.main_type as mainType,ei.unit_id as unitId,
+        ei.icon_id as iconId,ei.belong_airport as belongAirport
+        from exec_execise_icon ei
+        where ei.id=#{0}
+    </select>
+
+    <insert id="addExeciseIcon" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.ExeciseIcon">
+        insert into exec_execise_icon(exec_id,icon_id,icon_name,icon_data,speed,max_speed,newest_coordinate,label_by,
+        label_time,is_delete,color_array,unit_id,base_info_id,main_type,speed_unit,icon_type,belong_airport,execise_troop_id)
+        values(#{execId},#{iconId},#{iconName},#{iconData},#{speed},#{maxSpeed},#{newestCoordinate},#{labelBy},
+        #{labelTime},#{isDelete},#{colorArray},#{unitId},#{baseInfoId},#{mainType},#{speedUnit},#{iconType},#{belongAirport},#{execiseTroopId})
+    </insert>
+
+    <update id="modifyExeciseIcon" parameterType="com.ydh.model.ExeciseIcon">
+        update exec_execise_icon set icon_name=#{iconName},icon_data=#{iconData},speed=#{speed}
+        ,newest_coordinate=#{newestCoordinate},label_by=#{labelBy},label_time=#{labelTime},
+        icon_id=#{iconId} where id=#{id}
+    </update>
+
+    <update id="modifyExeciseIconCoordinate" parameterType="com.ydh.model.ExeciseIcon">
+        update exec_execise_icon set newest_coordinate=#{newestCoordinate} where id=#{id}
+    </update>
+
+    <update id="deleteExeciseIcon">
+        UPDATE exec_execise_icon SET is_delete = 1 WHERE id = #{0}
+    </update>
+
+    <update id="deleteExeciseIconByAirport">
+        UPDATE exec_execise_icon SET is_delete = 1 WHERE belong_airport = #{0}
+    </update>
+
+    <update id="modifyExecIconData" parameterType="com.ydh.model.ExeciseIcon">
+        update exec_execise_icon set
+        <if test="newestCoordinate != null and newestCoordinate != ''">newest_coordinate=#{newestCoordinate},</if>
+        <if test="speed != null">speed=#{speed},</if>
+        label_time=#{labelTime}
+        where id=#{id}
+    </update>
+
+    <update id="modifyExecIconDamage" parameterType="com.ydh.model.ExeciseIcon">
+        update exec_execise_icon set damage=#{damage},damage_time=#{damageTime},damage_detail=#{damageDetail} where id=#{id}
+    </update>
+
+    <update id="modifyExecIconAddEquipmentTime" parameterType="com.ydh.model.ExeciseIcon">
+        update exec_execise_icon set add_equipment_time=#{addEquipmentTime} where id=#{id}
+    </update>
+
+    <update id="modifyExecIconNull" parameterType="java.lang.Integer">
+        update exec_execise_icon set newest_coordinate=null,speed=null,belong_airport=#{1} where id=#{0}
+    </update>
+
+    <select id="findExeciseIconByUnitIdAndMainType" parameterType="java.util.Map" resultType="com.ydh.dto.ExeciseIconDto">
+        select ei.id as id,ei.exec_id as execId,ei.icon_name as iconName,ei.icon_data as iconData,
+        ei.newest_coordinate as newestCoordinate,ei.unit_id as unitId,ei.base_info_id as baseInfoId,
+        ei.main_type as mainType,ei.icon_type as iconType,ei.icon_id as iconId from exec_execise_icon ei
+        where ei.exec_id=#{execId} and (ei.is_delete is null or ei.is_delete=0)
+        <if test="unitId != null">
+            and ei.unit_id=#{unitId}
+        </if>
+        <if test="mt != null">
+            and ei.main_type=#{mt}
+        </if>
+    </select>
+
+    <select id="findExeciseIconByTroopId" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseIcon">
+        select ei.id as id from exec_execise_icon ei where ei.execise_troop_id=#{0} and (ei.is_delete is null or ei.is_delete=0)
+    </select>
+
+    <update id="modifyByExeciseTroop">
+        update exec_execise_icon set unit_id=#{et.unitId},speed=#{et.speed},newest_coordinate=#{co}
+        where execise_troop_id=#{et.id} and (is_delete is null or is_delete=0)
+    </update>
+
+    <update id="modifyByExeciseTroopWhenAirport">
+        update exec_execise_icon set unit_id=#{et.unitId}
+        where belong_airport in (select ei.id as id from exec_execise_icon ei where ei.execise_troop_id=#{et.id} and (ei.is_delete is null or ei.is_delete=0))
+        and (is_delete is null or is_delete=0)
+    </update>
+</mapper>

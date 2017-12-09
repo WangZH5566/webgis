@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+    <definition name="baseInfo.main" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoMain.jsp" />
+    </definition>
+    <definition name="baseInfo.load" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoLoad.jsp" />
+    </definition>
+    <definition name="baseInfo.icon" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoIcon.jsp" />
+    </definition>
+    <definition name="baseInfo.iconList" extends="win.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoIconList.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit0" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit0.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit1" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit1.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit2" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit2.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit3" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit3.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit4" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit4.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit5" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit5.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit6" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit6.jsp" />
+    </definition>
+    <definition name="baseInfo.addOrEdit7" extends="base.definition">
+        <put-attribute name="title" value="" />
+        <put-attribute name="body" value="/module/baseInfo/baseInfoAddOrEdit7.jsp" />
+    </definition>
+</tiles-definitions>

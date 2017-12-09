@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ydh.dao.BaseInfoDao">
+    
+    <resultMap id="baseInfoTypeMap" type="com.ydh.dto.BaseInfoTypeDto">
+        <id column="id" property="id"></id>
+        <result column="type_name" property="typeName"></result>
+        <result column="pid" property="pid"></result>
+        <result column="icon_id" property="iconId"></result>
+        <result column="main_type" property="mainType" typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"></result>
+        <result column="node_path" property="nodePath"></result>
+    </resultMap>
+
+    <select id="queryAllBasicInfoType" resultMap="baseInfoTypeMap">
+        select id,type_name,pid,icon_id,main_type,node_path from exec_basic_info_type order by id
+    </select>
+
+    <select id="queryRepeation" parameterType="com.ydh.model.BasicInfoType" resultType="com.ydh.model.BasicInfoType">
+        select id as id,type_name as typeName from exec_basic_info_type where type_name=#{typeName}
+        and main_type=#{mainType,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler}
+        <if test="id != null">
+            and id<![CDATA[<>]]>#{id}
+        </if>
+    </select>
+
+    <select id="queryBaseInfoTypeById" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoTypeDto">
+        select bity.id as id,bity.icon_id as iconId,ic.icon_path as iconPath,bity.node_path as nodePath from exec_basic_info_type bity
+        inner join exec_icon ic on ic.id=bity.icon_id
+        where bity.id=#{0}
+    </select>
+
+
+    <select id="queryBaseInfoCount" parameterType="com.ydh.dto.BaseInfoDto" resultType="java.lang.Integer">
+        select count(1) from exec_basic_info where type_id in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="queryBaseInfoPage" parameterType="com.ydh.dto.BaseInfoDto" resultType="com.ydh.dto.BaseInfoDto">
+        ${searchSql} where bi.type_id in
+        <foreach collection="ids" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        order by bi.id desc ${postgreSQLQueryPage}
+    </select>
+
+    <select id="queryBaseInfoByIds" parameterType="java.lang.Integer" resultType="com.ydh.model.ExeciseIcon">
+        select bi.id as baseInfoId,bi.info_code as iconName,bi.main_type as mainType,
+        bi.max_speed as maxSpeed,bity.icon_id as iconId,ic.icon_path as iconData
+        from exec_basic_info bi
+        inner join exec_basic_info_type bity on bity.id=bi.type_id
+        inner join exec_icon ic on ic.id=bity.icon_id
+        where bi.id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <insert id="addBasicInfoType" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.BasicInfoType">
+        insert into exec_basic_info_type(type_name,pid,main_type) values(#{typeName},#{pid},#{mainType,typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler})
+    </insert>
+
+    <update id="modifyBasicInfoType" parameterType="com.ydh.model.BasicInfoType">
+        update exec_basic_info_type set
+        <if test="typeName != null">
+            type_name=#{typeName}
+        </if>
+        <if test="iconId != null">
+            icon_id=#{iconId}
+        </if>
+        <if test="nodePath != null">
+            node_path=#{nodePath}
+        </if>
+        where id=#{id}
+    </update>
+
+    <delete id="deleteBasicInfoType" parameterType="java.lang.Integer">
+        delete from exec_basic_info_type where id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBasicInfoByTypeIds" parameterType="java.lang.Integer">
+        delete from exec_basic_info where type_id in
+        <foreach collection="array" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <insert id="addBasicInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.ydh.model.BasicInfo">
+        insert into exec_basic_info(info_name,info_code,belong_unit,max_speed,endurance,fight_radius,max_displacement,
+        standard_displacement,max_take_off_weight,development_unit,service_date,repair_situation,image_url,main_weapons,
+        address,longitude_and_latitude,technology_situation,switch_time,load_time,major_id,count,technology_level,
+        type_id,main_type,performance) values(#{infoName},#{infoCode},#{belongUnit},#{maxSpeed},#{endurance},#{fightRadius},
+        #{maxDisplacement},#{standardDisplacement},#{maxTakeOffWeight},#{developmentUnit},#{serviceDate},
+        #{repairSituation},#{imageUrl},#{mainWeapons},#{address},#{longitudeAndLatitude},#{technologySituation},
+        #{switchTime},#{loadTime},#{majorId},#{count},#{technologyLevel},#{typeId},#{mainType},#{performance})
+    </insert>
+
+    <update id="modifyBasicInfo" parameterType="com.ydh.model.BasicInfo">
+        update exec_basic_info set info_name=#{infoName},info_code=#{infoCode},belong_unit=#{belongUnit},max_speed=#{maxSpeed},
+        endurance=#{endurance},fight_radius=#{fightRadius},max_displacement=#{maxDisplacement},standard_displacement=#{standardDisplacement},
+        max_take_off_weight=#{maxTakeOffWeight},development_unit=#{developmentUnit},service_date=#{serviceDate},
+        repair_situation=#{repairSituation},image_url=#{imageUrl},main_weapons=#{mainWeapons},address=#{address},
+        longitude_and_latitude=#{longitudeAndLatitude},technology_situation=#{technologySituation},switch_time=#{switchTime},
+        load_time=#{loadTime},major_id=#{majorId},count=#{count},technology_level=#{technologyLevel},type_id=#{typeId},
+        main_type=#{mainType},performance=#{performance} where id=#{id}
+    </update>
+
+    <delete id="deleteBasicInfoById" parameterType="java.lang.Integer">
+        delete from exec_basic_info where id=#{0}
+    </delete>
+
+    <select id="queryById" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoDto">
+        select id as id,info_name as infoName,info_code as infoCode,belong_unit as belongUnit,max_speed as maxSpeed,
+        endurance as endurance,fight_radius as fightRadius,max_displacement as maxDisplacement,
+        standard_displacement as standardDisplacement,max_take_off_weight as maxTakeOffWeight,
+        development_unit as developmentUnit,service_date as serviceDate,repair_situation as repairSituation,
+        image_url as imageUrl,main_weapons as mainWeapons,address as address,
+        longitude_and_latitude as longitudeAndLatitude,technology_situation as technologySituation,switch_time as switchTime,
+        load_time as loadTime,major_id as majorId,count as count,technology_level as technologyLevel,type_id as typeId,
+        main_type as mainType,performance as performance from exec_basic_info where id=#{0}
+    </select>
+
+    <select id="queryAmmunition" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoDto">
+        select id as id,info_code as infoCode from exec_basic_info where main_type=#{0}
+    </select>
+
+
+    <select id="queryEuqipment" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoDto">
+        select bi.id as id,info_code as infoCode,bi.major_id as majorId,bim.major_name as majorName,
+        bi.count as count from exec_basic_info bi
+        inner join exec_basic_info_major bim on bim.id=bi.major_id
+        where bi.main_type=#{0}
+    </select>
+
+    <select id="queryAmmunitionByBaseInfoId" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoAmmunitionDto">
+        select bia.bi_id as biId,bia.ammunition_id as ammunitionId,bia.ammunition_count as ammunitionCount,ebi.info_code as ammunitionName,ebi.load_time as loadTime
+        from exec_basic_info_ammunition bia,exec_basic_info ebi
+        where ebi.id = bia.ammunition_id
+        and bia.bi_id=#{0}
+    </select>
+
+    <select id="queryEuqipmentByBaseInfoId" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoEuqipmentDto">
+        select ebie.bi_id as biId,ebie.equipment_id as euqipmentId,ebi.info_code as equipmentName from exec_basic_info_equipment ebie,exec_basic_info ebi
+        where ebi.id = ebie.equipment_id
+        and ebie.bi_id=#{0}
+    </select>
+
+    <insert id="addBaseInfoAmmunition" parameterType="com.ydh.model.BasicInfoAmmunition">
+        insert into exec_basic_info_ammunition(bi_id,ammunition_id,ammunition_count) values(#{biId},#{ammunitionId},#{ammunitionCount})
+    </insert>
+
+    <insert id="addBaseInfoEuqipment" parameterType="com.ydh.model.BasicInfoEuqipment">
+        insert into exec_basic_info_equipment(bi_id,equipment_id) values(#{biId},#{euqipmentId})
+    </insert>
+
+    <delete id="deleteBaseInfoAmmunition" parameterType="java.lang.Integer">
+        delete from exec_basic_info_ammunition where bi_id=#{0}
+    </delete>
+
+    <delete id="deleteBaseInfoEuqipment" parameterType="java.lang.Integer">
+        delete from exec_basic_info_equipment where bi_id=#{0}
+    </delete>
+
+    <select id="queryBaseInfoByIcon" parameterType="java.lang.Integer" resultType="com.ydh.dto.BaseInfoDto">
+        select ebi.id as id,ebi.info_name as infoName,ebi.info_code as infoCode,ebi.belong_unit as belongUnit,ebi.max_speed as maxSpeed,ebi.
+        endurance as endurance,ebi.fight_radius as fightRadius,ebi.max_displacement as maxDisplacement,ebi.
+        standard_displacement as standardDisplacement,ebi.max_take_off_weight as maxTakeOffWeight,ebi.
+        development_unit as developmentUnit,ebi.service_date as serviceDate,ebi.repair_situation as repairSituation,ebi.
+        image_url as imageUrl,ebi.main_weapons as mainWeapons,ebi.address as address,ebi.
+        longitude_and_latitude as longitudeAndLatitude,ebi.technology_situation as technologySituation,ebi.switch_time as switchTime,ebi.
+        load_time as loadTime,ebi.major_id as majorId,ebi.count as count,ebi.technology_level as technologyLevel,ebi.type_id as typeId,ebi.
+        main_type as mainType,ebi.performance as performance
+        from exec_basic_info ebi,exec_basic_info_type ebit1,exec_basic_info_type ebit2
+        where ebit1.icon_id=#{0}
+        and (ebit2.id=ebit1."id" or ebit2.node_path like ebit1.node_path||',%')
+        and ebi.type_id=ebit2.id
+    </select>
+
+    <select id="queryBaseInfoByIconWithoutIds" parameterType="java.util.Map" resultType="com.ydh.dto.BaseInfoDto">
+        select ebi.id as id,ebi.info_name as infoName,ebi.info_code as infoCode,ebi.belong_unit as belongUnit,ebi.max_speed as maxSpeed,ebi.
+        endurance as endurance,ebi.fight_radius as fightRadius,ebi.max_displacement as maxDisplacement,ebi.
+        standard_displacement as standardDisplacement,ebi.max_take_off_weight as maxTakeOffWeight,ebi.
+        development_unit as developmentUnit,ebi.service_date as serviceDate,ebi.repair_situation as repairSituation,ebi.
+        image_url as imageUrl,ebi.main_weapons as mainWeapons,ebi.address as address,ebi.
+        longitude_and_latitude as longitudeAndLatitude,ebi.technology_situation as technologySituation,ebi.switch_time as switchTime,ebi.
+        load_time as loadTime,ebi.major_id as majorId,ebi.count as count,ebi.technology_level as technologyLevel,ebi.type_id as typeId,ebi.
+        main_type as mainType,ebi.performance as performance
+        from exec_basic_info ebi,exec_basic_info_type ebit1,exec_basic_info_type ebit2
+        where ebit1.icon_id=#{iconId}
+        and (ebit2.id=ebit1."id" or ebit2.node_path like ebit1.node_path||',%')
+        and ebi.type_id=ebit2.id
+        <if test="ids != null">
+            and ebi.id not in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <select id="queryBaseInfoWithoutIds" parameterType="java.util.Map" resultType="com.ydh.dto.BaseInfoDto">
+        select ebi.id as id,ebi.info_name as infoName,ebi.info_code as infoCode,ebi.belong_unit as belongUnit,ebi.max_speed as maxSpeed,ebi.
+        endurance as endurance,ebi.fight_radius as fightRadius,ebi.max_displacement as maxDisplacement,ebi.
+        standard_displacement as standardDisplacement,ebi.max_take_off_weight as maxTakeOffWeight,ebi.
+        development_unit as developmentUnit,ebi.service_date as serviceDate,ebi.repair_situation as repairSituation,ebi.
+        image_url as imageUrl,ebi.main_weapons as mainWeapons,ebi.address as address,ebi.
+        longitude_and_latitude as longitudeAndLatitude,ebi.technology_situation as technologySituation,ebi.switch_time as switchTime,ebi.
+        load_time as loadTime,ebi.major_id as majorId,ebi.count as count,ebi.technology_level as technologyLevel,ebi.type_id as typeId,ebi.
+        main_type as mainType,ebi.performance as performance
+        from exec_basic_info ebi
+        inner join exec_basic_info_type bity on bity.id=ebi.type_id
+        inner join exec_icon ic on ic.id=bity.icon_id
+        where ebi.main_type=#{mt}
+        <if test="ids != null">
+            and ebi.id not in
+            <foreach collection="ids" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>
